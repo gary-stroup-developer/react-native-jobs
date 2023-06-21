@@ -17,11 +17,15 @@ const Popularjobs = () => {
       query: 'React Developer',
       num_pages: 1
     });
+  const [selectedJob, setSelectedJob] = useState();
+  const handlePress = (item) => {
+
+  }
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Popularjobs</Text> 
+        <Text style={styles.headerTitle}>Popular jobs</Text> 
         <TouchableOpacity>
           <Text style={styles.headerBtn}>Show All</Text>
         </TouchableOpacity>
