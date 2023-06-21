@@ -6,6 +6,8 @@ import { Company, JobAbout, JobFooter, JobTabs, ScreenHeaderBtn, Specifics } fro
 import { COLORS, SIZES, icons } from '../../constants';
 import useFetch from '../../hook/useFetch';
 
+const tabs = ["About", "Qualification", "Responsibilities"];
+
 const JobDetails = () => {
     const params = useSearchParams(); //allow us to get id of specific job page we are on
     const router = useRouter();
@@ -15,23 +17,41 @@ const JobDetails = () => {
     })
 
     const [refreshing, setRefreshing] = useState(false);
+    const [activeTab, setActiveTab] = useState(tabs[0]);
 
     const onRefresh = () => {
 
     };
 
+    const displayTabContent = () => {
+        switch (activeTab) {
+            case "Qualification":
+                return <Specifics title="Qualifications" points={data[0].job_highlights?.Qualifications ?? ['N/A']} />
+                break;
+            case "About":
+                return <JobAbout info={data[0].job_description ?? "No  data provided"} />
+                break;
+            case "Responsibilities":
+                return <Specifics title="Responsibilities" points={data[0].job_highlights?.Responsibilities ?? ['N/A']} />
+                break;
+        
+            default:
+                break;
+        }
+    }
+
   return (
       <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
           <Stack.Screen
               options={{
-                  headerStyle: { backgroundColor: COLORS.lightwhite },
+                  headerStyle: { backgroundColor: COLORS.lightWhite },
                   headerShadowVisible: false,
                   headerBackVisible: false,
                   headerLeft: () => (
                       <ScreenHeaderBtn
                           iconUrl={icons.left}
-                          dimension="60%"
-                          handlePress={() => router.back}
+                          dimension="70%"
+                          handlePress={() => router.back()}
                       />
                   ),
                   headerRight: () => (
@@ -60,7 +80,12 @@ const JobDetails = () => {
                                 companyName={data[0].employer_name}
                                 location={data[0].job_country}
                             />
-                            <JobTabs />
+                            <JobTabs
+                                tabs={tabs}
+                                activeTab={activeTab}
+                                setActiveTab={setActiveTab}
+                            />
+                            {displayTabContent()}
                         </View>
                   )}
               </ScrollView>
